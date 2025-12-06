@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 //import logos from "../assets/logos/";
 import axios from "axios";
 import { Link } from "react-router-dom";
-function Teams() {
-  interface Team {
+
+interface Team {
     teamID: number;
     teamLocation: string;
     teamName: string;
@@ -13,6 +13,9 @@ function Teams() {
     teamVenueId: number;
     teamLogo: string;
   }
+
+function Teams() {
+  
 
   const [teams, setTeams] = useState<Team[]>([]);
   //   https://vite.dev/guide/features#glob-import

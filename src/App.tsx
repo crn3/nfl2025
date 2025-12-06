@@ -6,6 +6,7 @@ import Routes from './Components/Routes';
 import Venues from './Components/Venues';
 import Teams from './Components/Teams'
 import TeamPlayers from './Components/TeamPlayers'
+import Player from './Components/Player'
 // import Players from './Components/Players';
 // import CurrentWeek from './Components/CurrentWeek';
 // import Scores from './Components/Scores';
@@ -26,6 +27,7 @@ function App() {
           <Route path="/venues" component={Venues} />
           <Route path="/teams" component={Teams} />
           <Route path="/teamPlayers/:teamName/:teamAbbreviation" component={TeamPlayers} />
+          <Route path="/player/:id" component={Player} />
 
           {/*<Route path="/players" component={Players} />
           <Route path="/currentWeek" component={CurrentWeek} />

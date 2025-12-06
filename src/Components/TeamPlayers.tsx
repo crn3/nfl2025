@@ -1,14 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { handleWeight, handleHeight, handleAge } from "../utils/formatters";
 
-function TeamPlayers() {
-  const { teamName, teamAbbreviation } = useParams<{
-    teamName: string;
-    teamAbbreviation: string;
-  }>();
-
-  interface TeamPlayer {
+interface TeamPlayer {
     id: number;
     teamid: number;
     firstName: string;
@@ -32,30 +27,16 @@ function TeamPlayers() {
     teamAbbreviation: string;
     teamDisplayName: string;
   }
+  
+  function TeamPlayers() {
+  const { teamName, teamAbbreviation } = useParams<{
+    teamName: string;
+    teamAbbreviation: string;
+  }>();
+
+  
 
   const [players, setPlayers] = useState<TeamPlayer[]>([]);
-
-  const handleWeight = (weightPounds: number) => {
-    const stone = Math.floor(weightPounds / 14);
-    const pounds = weightPounds % 14;
-    return `${stone}st ${pounds}lbs `;
-  };
-
-  const handleHeight = (heightInches: number) => {
-    const feet = Math.floor(heightInches / 12);
-    const inches = heightInches % 12;
-    return `${feet}' ${inches}" `;
-  };
-
-  const handleAge = (jsonDate:string) => {
-    //https://www.w3resource.com/javascript-exercises/javascript-date-exercise-18.php
-    const diff_ms = Date.now() - Date.parse(jsonDate);
-    const age_dt = new Date(diff_ms);
-    const birthdateFormatted = new Date(jsonDate).toISOString().split("T")[0];
-    const age = Math.abs(age_dt.getUTCFullYear() - 1970);
-    return `${birthdateFormatted} (${age})`;
-    
-  }
 
   useEffect(() => {
     const getPlayers = async () => {
@@ -92,15 +73,11 @@ function TeamPlayers() {
           {players.map((player) => (
             <tr key={player.id}>
               <td>{player.jersey}</td>
-              <td>{player.displayName}</td>
+              <td><Link to={`/player/${player.id}`}>{player.displayName}</Link></td>
               <td>{player.teamDisplayName}</td>
               <td>{player.position}</td>
-              <td>
-                {handleWeight(player.weight)}({player.weight}lbs)
-              </td>
-              <td>
-                {handleHeight(player.height)}({player.height}")
-              </td>
+              <td>{handleWeight(player.weight)}</td>
+              <td>{handleHeight(player.height)}</td>
               <td>{handleAge(player.dateOfBirth)}</td>
               <td>{player.college}</td>
             </tr>
