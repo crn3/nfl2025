@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCurrentWeek, WeekInterface } from "../utils/currentWeek";
+import { getCurrentWeek, WeekInterface } from "../utils/getCurrentWeek";
 import axios from "axios";
 import { formatDate } from "../utils/formatters";
 import { Game, GameWithLogos, Team } from "../interfaces/interfaces";
@@ -17,14 +17,13 @@ function CurrentWeek() {
       );
       const weeks = weeksResponse.data;
       const currentWeek = getCurrentWeek(weeks);
-      if (!currentWeek) return;
 
       // get the week's games
       const gamesResponse = await axios.get<Game[]>(
         `http://localhost:3000/scores/${currentWeek}`
       );
 
-      // get extra team data
+      // get team data
       const teamsResponse = await axios.get<Team[]>(
         `http://localhost:3000/teams`
       );
@@ -44,7 +43,6 @@ function CurrentWeek() {
       );
 
       setGames(gamesWithLogos);
-      console.log(gamesWithLogos);
     };
 
     getAllData();
