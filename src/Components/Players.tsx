@@ -1,34 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { handleAge, handleHeight, handleWeight } from "../utils/formatters";
-
-interface Player {
-  id: number;
-  teamid: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  displayName: string;
-  weight: number;
-  height: number;
-  age: number;
-  dateOfBirth: string;
-  debutYear: number;
-  birthPlacecity: string;
-  birthPlacestate: string;
-  birthPlacecountry: string;
-  college: string;
-  slug: string;
-  headshothref: string;
-  jersey: number;
-  position: string;
-  experience: number;
-  teamAbbreviation: string;
-  teamDisplayName: string;
-}
+import { Player } from "../interfaces/interfaces";
 
 function Players() {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     const getPlayers = async () => {
@@ -43,10 +20,24 @@ function Players() {
     };
     getPlayers();
   }, []);
+
+const playersFiltered = players.filter((player) => {
+    return(
+        player.displayName.toLowerCase().includes(searchInput.toLowerCase()) || 
+        player.teamDisplayName.toLowerCase().includes(searchInput.toLowerCase())
+    );
+  })
+
   return (
     <>
       <h1>Players</h1>
       <hr />
+      <input type="text" 
+      className="form-control" 
+      id="input" 
+      placeholder="Search name or team"
+      value={searchInput}
+      onChange={(e) => setSearchInput(e.target.value)} />
       <table className="table table-striped">
         <thead>
           <tr>
@@ -61,7 +52,7 @@ function Players() {
           </tr>
         </thead>
         <tbody>
-          {players.map((player) => (
+          {playersFiltered.map((player) => (
             <tr key={player.id}>
               <td>{player.jersey}</td>
               <td>{player.displayName}</td>

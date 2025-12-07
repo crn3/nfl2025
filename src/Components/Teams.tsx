@@ -2,17 +2,7 @@ import { useEffect, useState } from "react";
 //import logos from "../assets/logos/";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
-interface Team {
-    teamID: number;
-    teamLocation: string;
-    teamName: string;
-    teamAbbreviation: string;
-    teamDisplayName: string;
-    teamColor: string;
-    teamVenueId: number;
-    teamLogo: string;
-  }
+import {Team} from "../interfaces/interfaces";
 
 function Teams() {
   

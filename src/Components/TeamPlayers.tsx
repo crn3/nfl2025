@@ -2,45 +2,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { handleWeight, handleHeight, handleAge } from "../utils/formatters";
+import { Player } from "../interfaces/interfaces";
 
-interface TeamPlayer {
-    id: number;
-    teamid: number;
-    firstName: string;
-    lastName: string;
-    fullName: string;
-    displayName: string;
-    weight: number;
-    height: number;
-    age: number;
-    dateOfBirth: string;
-    debutYear: number;
-    birthPlacecity: string;
-    birthPlacestate: string;
-    birthPlacecountry: string;
-    college: string;
-    slug: string;
-    headshothref: string;
-    jersey: number;
-    position: string;
-    experience: number;
-    teamAbbreviation: string;
-    teamDisplayName: string;
-  }
-  
-  function TeamPlayers() {
+function TeamPlayers() {
+  // params from previous page
   const { teamName, teamAbbreviation } = useParams<{
     teamName: string;
     teamAbbreviation: string;
   }>();
 
-  
-
-  const [players, setPlayers] = useState<TeamPlayer[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
     const getPlayers = async () => {
-      const response = await axios.get<TeamPlayer[]>(
+      const response = await axios.get<Player[]>(
         `http://localhost:3000/players/${teamAbbreviation}`
       );
       const alphabetical = [...response.data].sort((a, b) =>
@@ -73,7 +48,9 @@ interface TeamPlayer {
           {players.map((player) => (
             <tr key={player.id}>
               <td>{player.jersey}</td>
-              <td><Link to={`/player/${player.id}`}>{player.displayName}</Link></td>
+              <td>
+                <Link to={`/player/${player.id}`}>{player.displayName}</Link>
+              </td>
               <td>{player.teamDisplayName}</td>
               <td>{player.position}</td>
               <td>{handleWeight(player.weight)}</td>

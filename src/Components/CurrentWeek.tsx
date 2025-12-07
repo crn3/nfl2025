@@ -2,80 +2,58 @@ import { useEffect, useState } from "react";
 import { getCurrentWeek, WeekInterface } from "../utils/currentWeek";
 import axios from "axios";
 import { formatDate } from "../utils/formatters";
+import { Game, GameWithLogos, Team } from "../interfaces/interfaces";
+import Scoreboard from "./Scoreboard";
 
-interface Game {
-  id: number;
-  date: string;
-  name: string;
-  shortName: string;
-  year: number;
-  weekNumber: number;
-  //   attendance: number;
-  //   venueId: number;
-  //   venueName: string;
-
-  team1ID: number;
-  team1DisplayName: string;
-  team1Score: number;
-
-  team2Id: number;
-  team2DisplayName: string;
-  team2Score: number;
-}
 
 function CurrentWeek() {
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<GameWithLogos[]>([]);
 
   useEffect(() => {
-    const getGames = async () => {
+    const getAllData = async () => {
+      // figure out what week it is
       const weeksResponse = await axios.get<WeekInterface[]>(
         "http://localhost:3000/weeks"
       );
       const weeks = weeksResponse.data;
-
       const currentWeek = getCurrentWeek(weeks);
       if (!currentWeek) return;
 
+      // get the week's games
       const gamesResponse = await axios.get<Game[]>(
         `http://localhost:3000/scores/${currentWeek}`
       );
-      setGames(gamesResponse.data);
+
+      // get extra team data
+      const teamsResponse = await axios.get<Team[]>(
+        `http://localhost:3000/teams`
+      );
+
+      // get logo by id
+      const getLogo = (teamId: number) =>
+        teamsResponse.data.find((team) => team.teamID == teamId)?.teamLogo ??
+        "";
+
+      // include logos with game response
+      const gamesWithLogos: GameWithLogos[] = gamesResponse.data.map(
+        (game) => ({
+          ...game,
+          team1Logo: getLogo(game.team1ID),
+          team2Logo: getLogo(game.team2Id),
+        })
+      );
+
+      setGames(gamesWithLogos);
+      console.log(gamesWithLogos);
     };
-    getGames();
+
+    getAllData();
   }, []);
+
   return (
     <>
       <h1>Week {games[0]?.weekNumber}</h1>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>Week</th>
-            <th>Date</th>
-            <th>Game</th>
-            <th></th>
-            <th></th>
-            <th>Score</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {games.map((game) => (
-            <tr key={game.id}>
-              <td>{game.weekNumber}</td>
-              <td>{formatDate(game.date)}</td>
-              <td>{game.shortName}</td>
-              <td></td>
-              <td>{game.team1DisplayName}</td>
-              <td>
-                {game.team1Score}-{game.team2Score}
-              </td>
-              <td>{game.team2DisplayName}</td>
-              <td></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Scoreboard games={games} />
     </>
   );
 }
