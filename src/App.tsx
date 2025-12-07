@@ -7,8 +7,8 @@ import Venues from './Components/Venues';
 import Teams from './Components/Teams'
 import TeamPlayers from './Components/TeamPlayers'
 import Player from './Components/Player'
-// import Players from './Components/Players';
-// import CurrentWeek from './Components/CurrentWeek';
+import Players from './Components/Players';
+import CurrentWeek from './Components/CurrentWeek';
 // import Scores from './Components/Scores';
 // import Standings from './Components/Standings';
 // import Login from './Components/Login';
@@ -28,10 +28,9 @@ function App() {
           <Route path="/teams" component={Teams} />
           <Route path="/teamPlayers/:teamName/:teamAbbreviation" component={TeamPlayers} />
           <Route path="/player/:id" component={Player} />
-
-          {/*<Route path="/players" component={Players} />
+          <Route path="/players" component={Players} />
           <Route path="/currentWeek" component={CurrentWeek} />
-          <Route path="/scores" component={Scores} />
+          {/*<Route path="/scores" component={Scores} />
           <Route path="/standings" component={Standings} />
           <Route path="/login" component={Login} /> */}
       </Switch>        

@@ -39,7 +39,7 @@ function Venues(){
         </thead>
         <tbody>
           {venues.map((venues)=> (
-            <tr>
+            <tr key={venues.venueID}>
             <td>{venues.venueName}</td>
             <td>{venues.venueCity}</td>
             <td>{venues.venueState}</td>
