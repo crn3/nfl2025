@@ -14,17 +14,20 @@ function TeamPlayers() {
   const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
-    const getPlayers = async () => {
-      const response = await axios.get<Player[]>(
-        `http://localhost:3000/players/${teamAbbreviation}`
-      );
-      const alphabetical = [...response.data].sort((a, b) =>
+
+
+    axios
+    .get<Player[]>(
+        `http://localhost:3000/players/${teamAbbreviation}`)
+        .then((response) => {
+          const alphabetical = [...response.data].sort((a, b) =>
         a.lastName.localeCompare(b.lastName)
       );
       setPlayers(alphabetical);
-    };
-
-    getPlayers();
+        })
+        .catch((err) => {
+        console.log(err);
+      });
   }, [teamAbbreviation]);
 
   return (

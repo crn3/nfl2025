@@ -44,9 +44,25 @@ export interface Team {
   team1ID: number;
   team1DisplayName: string;
   team1Score: number;
+  team1Qtr1Score: number;
+  team1Qtr1ScorePeriod: number;
+  team1Qtr2Score: number;
+  team1Qtr2ScorePeriod: number;
+  team1Qtr3Score: number;
+  team1Qtr3ScorePeriod: number;
+  team1Qtr4Score: number;
+  team1Qtr4ScorePeriod: number;
   team2Id: number;
   team2DisplayName: string;
   team2Score: number;
+  team2Qtr1Score: number;
+  team2Qtr1ScorePeriod: number;
+  team2Qtr2Score: number;
+  team2Qtr2ScorePeriod: number;
+  team2Qtr3Score: number;
+  team2Qtr3ScorePeriod: number;
+  team2Qtr4Score: number;
+  team2Qtr4ScorePeriod: number;
 }
 
 export interface GameWithLogos extends Game {

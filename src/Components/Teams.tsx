@@ -2,26 +2,26 @@ import { useEffect, useState } from "react";
 //import logos from "../assets/logos/";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import {Team} from "../interfaces/interfaces";
+import { Team } from "../interfaces/interfaces";
 
 function Teams() {
-  
-
   const [teams, setTeams] = useState<Team[]>([]);
   //   https://vite.dev/guide/features#glob-import
   //   const logos = import.meta.glob("../assets.logos/*.png",
   //     {as: "url", query: "?url", import: "default", eager: true, } )
 
   useEffect(() => {
-    const getTeams = async () => {
-      const response = await axios.get<Team[]>("http://localhost:3000/teams");
-      const alphabetical = [...response.data].sort((a, b) =>
-        a.teamDisplayName.localeCompare(b.teamDisplayName)
-      );
-      setTeams(alphabetical);
-    };
-
-    getTeams();
+    axios
+      .get<Team[]>("http://localhost:3000/teams")
+      .then((response) => {
+        const alphabetical = [...response.data].sort((a, b) =>
+          a.teamDisplayName.localeCompare(b.teamDisplayName)
+        );
+        setTeams(alphabetical);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (

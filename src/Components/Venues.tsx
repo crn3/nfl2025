@@ -1,31 +1,34 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function Venues(){
-    interface Venue{
-        venueID:string;
-        venueName:string;
-        venueCity:string;
-        venueState:string;
-        venueCountry:string;
-        indoor:string
-    }
+function Venues() {
+  interface Venue {
+    venueId: string;
+    venueName: string;
+    venueCity: string;
+    venueState: string;
+    venueCountry: string;
+    indoor: string;
+  }
 
-    const [venues, setVenues] = useState<Venue[]>([]);
+  const [venues, setVenues] = useState<Venue[]>([]);
 
-    useEffect(() => {
-        const getVenues = async () => {
-            const response = await axios.get<Venue[]>("http://localhost:3000/venues");
-            const alphabetical = [...response.data].sort((a,b) =>
-            a.venueName.localeCompare(b.venueName));
-            setVenues(alphabetical);
-        };
-        getVenues();
-    },[]);
+  useEffect(() => {
+    axios
+      .get<Venue[]>("http://localhost:3000/venues")
+      .then((response) => {
+        const alphabetical = [...response.data].sort((a, b) =>
+          a.venueName.localeCompare(b.venueName)
+        );
+        setVenues(alphabetical);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-    
-    return (
-        <>
+  return (
+    <>
       <h1>Venues</h1>
 
       <table className="table table-striped">
@@ -38,18 +41,17 @@ function Venues(){
           </tr>
         </thead>
         <tbody>
-          {venues.map((venues)=> (
-            <tr key={venues.venueID}>
-            <td>{venues.venueName}</td>
-            <td>{venues.venueCity}</td>
-            <td>{venues.venueState}</td>
-            <td>{venues.venueCountry}</td>
+          {venues.map((venue) => (
+            <tr key={venue.venueId}>
+              <td>{venue.venueName}</td>
+              <td>{venue.venueCity}</td>
+              <td>{venue.venueState}</td>
+              <td>{venue.venueCountry}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </>
-
-    );
+  );
 }
 export default Venues;

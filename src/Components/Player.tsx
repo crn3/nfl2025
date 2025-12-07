@@ -32,14 +32,14 @@ function Player() {
   const [player, setPlayer] = useState<Player | null>(null);
 
   useEffect(() => {
-    const getPlayer = async () => {
-      const response = await axios.get<Player[]>(
-        `http://localhost:3000/player/${id}`
-      );
-      setPlayer(response.data[0]);
-    };
-
-    getPlayer();
+    axios
+      .get<Player[]>(`http://localhost:3000/player/${id}`)
+      .then((response) => {
+        setPlayer(response.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   if (!player) {
@@ -48,7 +48,7 @@ function Player() {
 
   return (
     <>
-      <img src={player.headshothref} alt={player.fullName} width="200"/>
+      <img src={player.headshothref} alt={player.fullName} width="200" />
       <h1>{player.displayName} </h1>
       <p>{player.position}</p>
 

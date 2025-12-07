@@ -8,17 +8,17 @@ function Players() {
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
-    const getPlayers = async () => {
-      const response = await axios.get<Player[]>(
-        "http://localhost:3000/playersTeamNames"
-      );
 
+    axios
+    .get<Player[]>("http://localhost:3000/playersTeamNames")
+    .then((response) => {
       //https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
       const ordered = [...response.data].sort((a, b) =>
         a.teamDisplayName.localeCompare(b.teamDisplayName) || a.lastName.localeCompare(b.lastName));
       setPlayers(ordered);
-    };
-    getPlayers();
+    }).catch((err) => {
+        console.log(err);
+      });
   }, []);
 
 const playersFiltered = players.filter((player) => {
@@ -26,7 +26,7 @@ const playersFiltered = players.filter((player) => {
         player.displayName.toLowerCase().includes(searchInput.toLowerCase()) || 
         player.teamDisplayName.toLowerCase().includes(searchInput.toLowerCase())
     );
-  })
+  }, []);
 
   return (
     <>

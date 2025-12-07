@@ -5,12 +5,19 @@ function Routes() {
   const [textarea, setTextArea] = useState("");
   const [textareaTitle, setTextAreaTitle] = useState("");
 
-  const handleUpdateTextArea = async (url: string, routeName: string) => {
+  const handleUpdateTextArea = (url: string, routeName: string) => {
     setTextArea("");
     setTextAreaTitle("");
-    const response = await axios.get(url);
-    setTextArea(JSON.stringify(response.data, null, 2));
-    setTextAreaTitle(routeName);
+
+    axios
+    .get(url)
+    .then((response)=>{
+      setTextArea(JSON.stringify(response.data, null, 2));
+      setTextAreaTitle(routeName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   return (

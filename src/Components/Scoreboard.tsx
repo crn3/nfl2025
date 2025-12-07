@@ -1,13 +1,14 @@
 import { formatDate } from "../utils/formatters";
-import { GameWithLogos } from "../interfaces/interfaces"
+import { GameWithLogos } from "../interfaces/interfaces";
+import { Link } from "react-router-dom";
 
 interface ScoreboardProps {
-    games: GameWithLogos[];
+  games: GameWithLogos[];
 }
 
-export default function Scoreboard ({games} : ScoreboardProps) {
-    return (
-        <>
+function Scoreboard({ games }: ScoreboardProps) {
+  return (
+    <>
       <table className="table table-striped">
         <thead>
           <tr>
@@ -27,18 +28,22 @@ export default function Scoreboard ({games} : ScoreboardProps) {
               <td>{game.weekNumber}</td>
               <td>{formatDate(game.date)}</td>
               <td>{game.shortName}</td>
-              <td><img src={game.team1Logo} width="30"/></td>
+              <td>
+                <img src={game.team1Logo} width="30" />
+              </td>
               <td>{game.team1DisplayName}</td>
               <td>
-                {game.team1Score}-{game.team2Score}
+                <Link to={`/scoreDetail/${game.id}`}>{game.team1Score}-{game.team2Score}</Link>
               </td>
               <td>{game.team2DisplayName}</td>
-              <td><img src={game.team2Logo} width="30"/></td>
+              <td>
+                <img src={game.team2Logo} width="30" />
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </>
-
-    );
+  );
 }
+export default Scoreboard;

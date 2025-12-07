@@ -10,10 +10,10 @@ export const handleWeight = (weightPounds: number) => {
     return `${feet}' ${inches}" (${heightInches}")`;
   };
 
-export const formatDate = (jsonDate:string) => {
-    const formatted = new Date(jsonDate).toISOString().split("T")[0];
-    return formatted;
-  };
+export const formatDate = (jsonDate: string) => {
+  const [year, month, day] = new Date(jsonDate).toISOString().split("T")[0].split("-");
+  return `${day}-${month}-${year}`;
+};
 
   export const handleAge = (jsonDate:string) => {
     //https://www.w3resource.com/javascript-exercises/javascript-date-exercise-18.php
