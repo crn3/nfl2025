@@ -1,11 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Scoreboard from "./Scoreboard";
 import { useGames } from "../hooks/useGames";
+import { getCurrentWeek, WeekInterface } from "../utils/getCurrentWeek";
+import axios from "axios";
 
 function Scores() {
   const { games } = useGames({ currentWeekOnly: false });
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
+  const [weeks, setWeeks] = useState<WeekInterface[]>([]);
+  const [currentWeek, setCurrentWeek] = useState<number | null>(null);
 
+  useEffect(() => {
+    axios
+      .get<WeekInterface[]>("http://localhost:3000/weeks")
+      .then((response) => {
+        setWeeks(response.data);
+        const currentWeek = getCurrentWeek(response.data);
+        setCurrentWeek(currentWeek);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // if theres no week selected, show all games
+  // otherwise show games from the selected week
   const filteredGames =
     selectedWeek == null
       ? games
@@ -18,23 +37,27 @@ function Scores() {
   return (
     <>
       <h1>Scores</h1>
+      <hr />
       <nav className="navbar navbar-expand-lg">
-        <div className="contrainer-fluid">
-          <ul className="navbar-nav me-auto nav-item">
+        <div className="container-fluid">
+          <ul className="navbar-nav">
             {Array.from({ length: 18 }, (_, i) => i + 1).map((week) => (
-              <li className="nav-item" key={week}>
-                <button
-                  className="btn btn-link"
+              <li key={week}>
+                <a href="#"
+                  className={` ${
+                    week == currentWeek ? "fw-bold" : ""
+                  }`}
                   onClick={() => handleWeekClick(week)}
                 >
-                  Week {week}
-                </button>
-                |
+                  {currentWeek == week ? `**Week ${week}**` : `Week ${week}`}
+                </a>&nbsp;
+                | &nbsp;
               </li>
             ))}
           </ul>
         </div>
       </nav>
+      <hr />
       <Scoreboard games={filteredGames} />
     </>
   );
