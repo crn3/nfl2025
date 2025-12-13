@@ -2,71 +2,134 @@ import { useEffect, useState } from "react";
 import { Game, Standing, Team } from "../interfaces/interfaces";
 import axios from "axios";
 
-// const 
+// put each team into an array
+const getTeam = (
+  standings: Standing[],
+  teamID: number,
+  displayName: string,
+  logo: string
+) => {
+  let team = standings.find((t) => t.teamID === teamID);
+  //for every team id found in games, find if there's a team with that id in teams
+  //if it isn't already in the array, add it
 
+  if (!team) {
+    team = {
+      teamID,
+      displayName,
+      logo,
+      w: 0,
+      l: 0,
+      t: 0,
+      pf: 0,
+      pa: 0,
+    };
+    standings.push(team);
+  }
 
+  return team;
+};
 
-// // for each game in games
-//     // for team1
-//         // use scores.data[0].team1ID == team.id get team logo display name from team endpoint
-//         // if team1 score > team2 score
-//             // team1 team's wins += 1
-//         // else if team1 score < team2 score
-//             // team1 team's loses += 1
-//         // else if team1 score = team2 score
-//             // team1 team's ties += 1
-//         // team1 team's pf += team1 score
-//         // team1 team's pa += team2 score
-//         // team1 team's total games = wins + losses + ties
-//         // team1 team's pct = (team1 wins + .5*team1 ties)/team1 total games
-//         // team1 team's pdiff = pf - pa
-//     // for team 2
-//     // use scores.data[0].team2Id == team.id get team logo and display name from team endpoint
-//         // if team1 score < team2 score
-//                 // team2 team's wins += 1
-//             // else if team1 score > team2 score
-//                 // team2 team's loses += 1
-//             // else if team1 score = team2 score
-//                 // team2 team's ties += 1
-//             // team2 team's pf += team2 score
-//             // team2 team's pa += team1 score
-//             // team2 team's total games = wins + losses + ties
-//             // team2 team's pct = (team1 wins + .5*team1 ties)/team1 total games
-//             // team2 team's pdiff = pf - pa
+function Standings() {
+  const [standings, setStandings] = useState<Standing[]>([]);
 
+  useEffect(() => {
+    Promise.all([
+      // allows 1+ requests
+      axios.get<Game[]>("http://localhost:3000/scores"),
+      axios.get<Team[]>("http://localhost:3000/teams"),
+    ]).then(([gameResponse, teamResponse]) => {
+      const games = gameResponse.data;
+      const teams = teamResponse.data;
+      const table: Standing[] = [];
 
+      const getLogo = (id: number) =>
+        teams.find((t) => t.teamID == id)?.teamLogo ?? ""; //won't crash if undefined
 
-// function Standings(){
-//     const [standings, setStandings] = useState<Standing[]>([]);
+      games.forEach((game) => {
+        const team1 = getTeam(
+          table,
+          game.team1ID,
+          game.team1DisplayName,
+          getLogo(game.team1ID)
+        );
+        const team2 = getTeam(
+          table,
+          game.team2Id,
+          game.team2DisplayName,
+          getLogo(game.team2Id)
+        );
 
-//     useEffect(() =>{
-//         axios.get<Game[]>("http://localhost:3000/scores"),
-//         axios.get<Team[]>("http://localhost:3000/teams"),
-//         //.then([scoreResponse])
+        team1.pf += game.team1Score;
+        team1.pa += game.team2Score;
+        team2.pf += game.team2Score;
+        team2.pa += game.team1Score;
 
-//     }, []);
-// return(
-//     <>
-//     <h1>Leeague Standings</h1>
-//     <hr />
-//     <table>
-// <thead>
-//     <tr>
-//         <th>#</th>
-//         <th>logo</th>
-//         <th>Name</th>
-//         <th>W</th>
-//         <th>L</th>
-//         <th>T</th>
-//         <th>PCT</th>
-//         <th>PF</th>
-//         <th>PA</th>
-//         <th>PDiff</th>
-//     </tr>
-// </thead>
-//     </table>
-//     </>
+        if (game.team1Score > game.team2Score) {
+          team1.w += 1;
+          team2.l += 1;
+        } else if (game.team1Score < game.team2Score) {
+          team2.w += 1;
+          team1.l += 1;
+        } else if ((game.team1Score = game.team2Score)) {
+          team1.t += 1;
+          team2.t += 1;
+        }
+      });
+      setStandings(table);
+    });
+  }, []);
+  return (
+    <>
+      <h1>Leeague Standings</h1>
+      <hr />
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th></th>
+            <th>Name</th>
+            <th>W</th>
+            <th>L</th>
+            <th>T</th>
+            <th>PCT</th>
+            <th>PF</th>
+            <th>PA</th>
+            <th>PDiff</th>
+          </tr>
+        </thead>
+        <tbody>
+          {standings
+            .sort((a, b) => {
+              const pctA = (a.w + 0.5 * a.t) / (a.w + a.l + a.t);
+              const pctB = (b.w + 0.5 * b.t) / (b.w + b.l + b.t);
+              return pctB - pctA;
+            })
+            .map((team, index) => {
+              const games = team.w + team.l + team.t;
+              const pct = games ? (team.w + 0.5 * team.t) / games : 0;
+              const pdiff = team.pf - team.pa;
 
-// );
-// }
-// export default Standings;
+              return (
+                <tr key={team.teamID}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <img src={team.logo} alt="" width={24} />{" "}
+                  </td>
+                  <td>{team.displayName}</td>
+                  <td>{team.w}</td>
+                  <td>{team.l}</td>
+                  <td>{team.t}</td>
+                  <td>{pct.toFixed(3)}</td>
+                  <td>{team.pf}</td>
+                  <td>{team.pa}</td>
+                  <td>{pdiff}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    </>
+  );
+}
+export default Standings;

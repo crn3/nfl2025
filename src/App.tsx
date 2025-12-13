@@ -11,7 +11,7 @@ import Players from "./Components/Players";
 import CurrentWeek from "./Components/CurrentWeek";
 import Scores from "./Components/Scores";
 import ScoreDetail from "./Components/ScoreDetail";
-//import Standings from './Components/Standings';
+import Standings from './Components/Standings';
 import Login from "./Components/Login";
 import Admin from "./Components/Admin";
 import Footer from "./Components/Footer";
@@ -39,7 +39,7 @@ function App() {
           <Route path="/currentWeek" component={CurrentWeek} />
           <Route path="/scores" component={Scores} />
           <Route path="/scoreDetail/:gameID" component={ScoreDetail} />
-          {/*<Route path="/standings" component={Standings} />*/}
+          <Route path="/standings" component={Standings} />
           <Route
             path="/login"
             render={(props) => <Login {...props} setLoggedIn={setLoggedIn} />}
