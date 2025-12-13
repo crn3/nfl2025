@@ -69,3 +69,13 @@ export interface GameWithLogos extends Game {
   team1Logo: string;
   team2Logo: string;
 }
+export interface Standing {
+  teamID: number;
+  displayName: string;
+  logo: string;
+  w: number;
+  l: number;
+  t: number;
+  pf: number;
+  pa: number;
+};
