@@ -81,7 +81,7 @@ function Standings() {
   }, []);
   return (
     <>
-      <h1>Leeague Standings</h1>
+      <h1>League Standings</h1>
       <hr />
       <table className="table table-striped">
         <thead>

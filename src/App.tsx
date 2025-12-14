@@ -15,6 +15,7 @@ import Standings from './Components/Standings';
 import Login from "./Components/Login";
 import Admin from "./Components/Admin";
 import Footer from "./Components/Footer";
+import ScoreUpdate from "./Components/ScoreUpdate";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -46,6 +47,7 @@ function App() {
           />
           <Route path="/admin" 
           render={() => loggedIn ? <Admin /> : <Redirect to="/routes" /> } />
+          <Route path="/scoreUpdate/:id" component={ScoreUpdate} />
         </Switch>
       </BrowserRouter>
       <Footer />

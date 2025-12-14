@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 
 interface ScoreboardProps {
   games: GameWithLogos[];
+  addButton?: (game: GameWithLogos) => React.ReactNode;
 }
 
-function Scoreboard({ games }: ScoreboardProps) {
+function Scoreboard({ games, addButton }: ScoreboardProps) {
   return (
     <>
       <table className="table table-striped">
@@ -20,6 +21,7 @@ function Scoreboard({ games }: ScoreboardProps) {
             <th>Score</th>
             <th></th>
             <th></th>
+            {addButton && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -39,6 +41,9 @@ function Scoreboard({ games }: ScoreboardProps) {
               <td>
                 <img src={game.team2Logo} width="30" />
               </td>
+                    {addButton && (
+        <td>{addButton(game)}</td>
+      )}
             </tr>
           ))}
         </tbody>
