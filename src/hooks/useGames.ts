@@ -1,4 +1,4 @@
-// returns an array of game
+// returns an array of games
 // either all games from all weeks
 // or all games from the current week
 
@@ -13,7 +13,6 @@ interface UseGamesOptions {
 }
 
 export function useGames({ currentWeekOnly = false }: UseGamesOptions = {}) {
-  
   const [games, setGames] = useState<GameWithLogos[]>([]);
 
   useEffect(() => {

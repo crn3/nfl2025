@@ -1,20 +1,19 @@
 import { useState } from "react";
-//import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 interface Props {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Login({setLoggedIn}: Props) {
+function Login({ setLoggedIn }: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const history = useHistory();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!username || !password) {
@@ -22,27 +21,30 @@ function Login({setLoggedIn}: Props) {
       return;
     }
 
-    try {
-      const response = await axios.get("http://localhost:3000/users"); 
-      const users = response.data;
+    axios
+      .get("http://localhost:3000/users")
+      .then((response) => {
+        const users = response.data;
 
-      const user = users.find(
-        (u: { email: string; password: string }) =>
-          u.email === username && u.password === password
-      );
-      console.log(user);
+        const user = users.find(
+          (u: { email: string; password: string }) =>
+            u.email == username && u.password == password
+        );
 
-      if (user) {
-        localStorage.setItem("loggedIn", "true");
-        setLoggedIn(true);
-        history.push("/Admin");
-      } else {
-        setError("Invalid credentials");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Error connecting to server");
-    }
+        console.log(user);
+
+        if (user) {
+          localStorage.setItem("loggedIn", "true");
+          setLoggedIn(true);
+          history.push("/admin"); // note lowercase path to match your routes
+        } else {
+          setError("Invalid credentials");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Error connecting to server");
+      });
   };
 
   return (

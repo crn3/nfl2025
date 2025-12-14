@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GameWithLogos, Game, Team } from "../interfaces/interfaces";
-import axios from "axios";
 import { useGame } from "../hooks/useGame";
 
 function ScoreDetail() {
   const { gameID } = useParams<{ gameID: string }>();
-  const { game} = useGame(gameID);
+  const { game } = useGame(gameID);
 
   if (!game) return <div> </div>;
   return (

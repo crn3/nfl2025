@@ -2,38 +2,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { handleWeight, handleHeight, handleAge } from "../utils/formatters";
-
-interface Player {
-  id: number;
-  teamid: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  displayName: string;
-  weight: number;
-  height: number;
-  age: number;
-  dateOfBirth: string;
-  debutYear: number;
-  birthPlacecity: string;
-  birthPlacestate: string;
-  birthPlacecountry: string;
-  college: string;
-  slug: string;
-  headshothref: string;
-  jersey: number;
-  position: string;
-  experience: number;
-}
+import { Player as IPlayer } from "../interfaces/interfaces";
 
 function Player() {
   const { id } = useParams<{ id: string }>();
 
-  const [player, setPlayer] = useState<Player | null>(null);
+  const [player, setPlayer] = useState<IPlayer | null>(null);
 
   useEffect(() => {
     axios
-      .get<Player[]>(`http://localhost:3000/player/${id}`)
+      .get<IPlayer[]>(`http://localhost:3000/player/${id}`)
       .then((response) => {
         setPlayer(response.data[0]);
       })
@@ -48,7 +26,7 @@ function Player() {
 
   return (
     <>
-      <img src={player.headshothref} alt={player.fullName} width="200" />
+      <img src={player.headshothref} width="200" />
       <h1>{player.displayName} </h1>
       <p>{player.position}</p>
 

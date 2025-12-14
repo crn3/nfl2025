@@ -35,15 +35,15 @@ function Scoreboard({ games, addButton }: ScoreboardProps) {
               </td>
               <td>{game.team1DisplayName}</td>
               <td>
-                <Link to={`/scoreDetail/${game.id}`}>{game.team1Score}-{game.team2Score}</Link>
+                <Link to={`/scoreDetail/${game.id}`}>
+                  {game.team1Score}-{game.team2Score}
+                </Link>
               </td>
               <td>{game.team2DisplayName}</td>
               <td>
                 <img src={game.team2Logo} width="30" />
               </td>
-                    {addButton && (
-        <td>{addButton(game)}</td>
-      )}
+              {addButton && <td>{addButton(game)}</td>}
             </tr>
           ))}
         </tbody>

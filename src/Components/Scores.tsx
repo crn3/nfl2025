@@ -7,14 +7,12 @@ import axios from "axios";
 function Scores() {
   const { games } = useGames({ currentWeekOnly: false });
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
-  const [weeks, setWeeks] = useState<WeekInterface[]>([]);
   const [currentWeek, setCurrentWeek] = useState<number | null>(null);
 
   useEffect(() => {
     axios
       .get<WeekInterface[]>("http://localhost:3000/weeks")
       .then((response) => {
-        setWeeks(response.data);
         const currentWeek = getCurrentWeek(response.data);
         setCurrentWeek(currentWeek);
       })
@@ -23,8 +21,6 @@ function Scores() {
       });
   }, []);
 
-  // if theres no week selected, show all games
-  // otherwise show games from the selected week
   const filteredGames =
     selectedWeek == null
       ? games
@@ -43,15 +39,14 @@ function Scores() {
           <ul className="navbar-nav">
             {Array.from({ length: 18 }, (_, i) => i + 1).map((week) => (
               <li key={week}>
-                <a href="#"
-                  className={` ${
-                    week == currentWeek ? "fw-bold" : ""
-                  }`}
+                <a
+                  href="#"
+                  className={` ${week == currentWeek ? "fw-bold" : ""}`}
                   onClick={() => handleWeekClick(week)}
                 >
                   {currentWeek == week ? `**Week ${week}**` : `Week ${week}`}
-                </a>&nbsp;
-                | &nbsp;
+                </a>
+                &nbsp; | &nbsp;
               </li>
             ))}
           </ul>

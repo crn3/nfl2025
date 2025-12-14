@@ -34,8 +34,8 @@ function Standings() {
   const [standings, setStandings] = useState<Standing[]>([]);
 
   useEffect(() => {
+    // allows 1+ requests
     Promise.all([
-      // allows 1+ requests
       axios.get<Game[]>("http://localhost:3000/scores"),
       axios.get<Team[]>("http://localhost:3000/teams"),
     ]).then(([gameResponse, teamResponse]) => {

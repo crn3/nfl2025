@@ -5,9 +5,7 @@
 import axios from "axios";
 import { Game, GameWithLogos, Team } from "../interfaces/interfaces";
 
-export function addTeamLogosToGames(
-  games: Game[]
-): Promise<GameWithLogos[]> {
+export function addTeamLogosToGames(games: Game[]): Promise<GameWithLogos[]> {
   return axios
     .get<Team[]>("http://localhost:3000/teams")
     .then((teamsResponse) => {

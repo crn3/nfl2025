@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logos/nfl.png";
-import { useEffect, useState } from "react";
 
 interface Props {
   loggedIn: boolean;

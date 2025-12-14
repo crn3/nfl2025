@@ -1,15 +1,15 @@
 export interface Team {
-    teamID: number;
-    teamLocation: string;
-    teamName: string;
-    teamAbbreviation: string;
-    teamDisplayName: string;
-    teamColor: string;
-    teamVenueId: number;
-    teamLogo: string;
-  }
+  teamID: number;
+  teamLocation: string;
+  teamName: string;
+  teamAbbreviation: string;
+  teamDisplayName: string;
+  teamColor: string;
+  teamVenueId: number;
+  teamLogo: string;
+}
 
-  export interface Player {
+export interface Player {
   id: number;
   teamid: number;
   firstName: string;
@@ -34,7 +34,7 @@ export interface Team {
   teamDisplayName: string;
 }
 
-  export interface Game {
+export interface Game {
   id: number;
   date: string;
   name: string;
@@ -78,4 +78,4 @@ export interface Standing {
   t: number;
   pf: number;
   pa: number;
-};
+}

@@ -1,7 +1,7 @@
 export interface WeekInterface {
-    week: number;
-    startdate: string;
-    enddate: string;
+  week: number;
+  startdate: string;
+  enddate: string;
 }
 
 export const getCurrentWeek = (weeks: WeekInterface[]): number | null => {

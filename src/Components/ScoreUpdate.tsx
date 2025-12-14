@@ -1,5 +1,4 @@
 import { useHistory, useParams } from "react-router-dom";
-import { GameWithLogos } from "../interfaces/interfaces";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGame } from "../hooks/useGame";
@@ -20,7 +19,7 @@ function ScoreUpdate() {
     team2Qtr3Score: "",
     team2Qtr4Score: "",
   });
-  
+
   const team1Score =
     (Number(formData.team1Qtr1Score) || 0) +
     (Number(formData.team1Qtr2Score) || 0) +
@@ -76,8 +75,8 @@ function ScoreUpdate() {
       team2Qtr2Score: t2Q2,
       team2Qtr3Score: t2Q3,
       team2Qtr4Score: t2Q4,
-      team1Score: t1Q1 + t1Q2 + t1Q3 + t1Q4,
-      team2Score: t2Q1 + t2Q2 + t2Q3 + t2Q4,
+      team1Score: team1Score,
+      team2Score: team2Score,
     };
 
     axios

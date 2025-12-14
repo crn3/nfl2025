@@ -8,23 +8,26 @@ function Players() {
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
-
     axios
-    .get<Player[]>("http://localhost:3000/playersTeamNames")
-    .then((response) => {
-      //https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
-      const ordered = [...response.data].sort((a, b) =>
-        a.teamDisplayName.localeCompare(b.teamDisplayName) || a.lastName.localeCompare(b.lastName));
-      setPlayers(ordered);
-    }).catch((err) => {
+      .get<Player[]>("http://localhost:3000/playersTeamNames")
+      .then((response) => {
+        //https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
+        const ordered = [...response.data].sort(
+          (a, b) =>
+            a.teamDisplayName.localeCompare(b.teamDisplayName) ||
+            a.lastName.localeCompare(b.lastName)
+        );
+        setPlayers(ordered);
+      })
+      .catch((err) => {
         console.log(err);
       });
   }, []);
 
-const playersFiltered = players.filter((player) => {
-    return(
-        player.displayName.toLowerCase().includes(searchInput.toLowerCase()) || 
-        player.teamDisplayName.toLowerCase().includes(searchInput.toLowerCase())
+  const playersFiltered = players.filter((player) => {
+    return (
+      player.displayName.toLowerCase().includes(searchInput.toLowerCase()) ||
+      player.teamDisplayName.toLowerCase().includes(searchInput.toLowerCase())
     );
   }, []);
 
@@ -32,12 +35,14 @@ const playersFiltered = players.filter((player) => {
     <>
       <h1>Players</h1>
       <hr />
-      <input type="text" 
-      className="form-control" 
-      id="input" 
-      placeholder="Search name or team"
-      value={searchInput}
-      onChange={(e) => setSearchInput(e.target.value)} />
+      <input
+        type="text"
+        className="form-control"
+        id="input"
+        placeholder="Search name or team"
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+      />
       <table className="table table-striped">
         <thead>
           <tr>

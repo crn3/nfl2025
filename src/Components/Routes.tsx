@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 function Routes() {
   const [textarea, setTextArea] = useState("");
@@ -10,14 +10,14 @@ function Routes() {
     setTextAreaTitle("");
 
     axios
-    .get(url)
-    .then((response)=>{
-      setTextArea(JSON.stringify(response.data, null, 2));
-      setTextAreaTitle(routeName);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .get(url)
+      .then((response) => {
+        setTextArea(JSON.stringify(response.data, null, 2));
+        setTextAreaTitle(routeName);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

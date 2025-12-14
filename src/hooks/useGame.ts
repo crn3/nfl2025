@@ -16,7 +16,7 @@ export function useGame(gameID: string | undefined) {
       .then((response) => {
         const gameData = response.data;
         return addTeamLogosToGames(gameData).then((gamesWithLogos) => {
-          return gamesWithLogos[0]; 
+          return gamesWithLogos[0];
         });
       })
       .then((gameWithLogos) => {
