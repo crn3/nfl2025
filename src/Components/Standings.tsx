@@ -71,7 +71,7 @@ function Standings() {
         } else if (game.team1Score < game.team2Score) {
           team2.w += 1;
           team1.l += 1;
-        } else if ((game.team1Score = game.team2Score)) {
+        } else if (game.team1Score == game.team2Score) {
           team1.t += 1;
           team2.t += 1;
         }
@@ -101,10 +101,22 @@ function Standings() {
         <tbody>
           {standings
             .sort((a, b) => {
-              const pctA = (a.w + 0.5 * a.t) / (a.w + a.l + a.t);
-              const pctB = (b.w + 0.5 * b.t) / (b.w + b.l + b.t);
-              return pctB - pctA;
+              const totalGamesA = a.w + a.l + a.t;
+              const totalGamesB = b.w + b.l + b.t;
+
+              const pctA = totalGamesA ? (a.w + 0.5 * a.t) / totalGamesA : 0;
+              const pctB = totalGamesB ? (b.w + 0.5 * b.t) / totalGamesB : 0;
+
+              if (pctB !== pctA) {
+                return pctB - pctA;
+              } //sort by pct first
+
+              const pdiffA = a.pf - a.pa;
+              const pdiffB = b.pf - b.pa;
+
+              return pdiffB - pdiffA; //sort by pdiff second
             })
+
             .map((team, index) => {
               const games = team.w + team.l + team.t;
               const pct = games ? (team.w + 0.5 * team.t) / games : 0;
